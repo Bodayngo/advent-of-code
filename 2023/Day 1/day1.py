@@ -1,7 +1,7 @@
 import os
 
 directory = os.path.dirname(os.path.realpath(__file__))
-input_file = f"{directory}/input.txt"
+input_file = f"{directory}/day1_input.txt"
 
 def part1():
     number_list = []
