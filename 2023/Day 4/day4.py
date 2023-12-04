@@ -3,7 +3,7 @@ import re
 
 # File input
 directory = os.path.dirname(os.path.realpath(__file__))
-input_file = f"{directory}/test_input.txt"
+input_file = f"{directory}/day4_input.txt"
 with open(input_file, 'r') as file:
     input_lines = file.read().strip().splitlines()
 
@@ -33,9 +33,6 @@ def part2():
             scratchcard_counts[index] = 1
         else:
             scratchcard_counts[index] += 1
-        
-        print(card)
-        print(f"Index: {index}")
 
         numbers = re.sub(r'Card\s+\d+:', '', card)
         split_numbers = numbers.split('|')
@@ -46,20 +43,20 @@ def part2():
         for number in scratched_numbers:
             if number in winning_numbers:
                 matches += 1
-        print(f"Matches: {matches}")
 
         if matches != 0:
             for i in range(index+1, index+1+matches):
-                print(i)
-                scratchcard_counts[i] = scratchcard_counts.get(i, 0) + 1
-    print(scratchcard_counts)
-
-
+                scratchcard_counts[i] = scratchcard_counts.get(i, 0) + (1 * scratchcard_counts[index])
+    num_cards = 0
+    for count in scratchcard_counts.values():
+        num_cards += count
+    return(num_cards)
 
 def main():
     part1_result = part1()
     print(f"Part 1 answer: {part1_result}")
-    part2()
+    part2_result = part2()
+    print(f"Part 2 answer: {part2_result}")
 
 if __name__ == '__main__':
     main()
