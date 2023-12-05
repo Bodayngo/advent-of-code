@@ -18,7 +18,18 @@ def process_line(line):
     return winning_numbers, scratched_numbers
 
 def part1():
-    return sum(1 for _, scratched_numbers in (process_line(line) for line in input_lines) if any(num in scratched_numbers for num in _))
+    total_points = 0
+    for card in input_lines:
+        winning_numbers, scratched_numbers = process_line(card)
+        
+        points = 0
+        for number in scratched_numbers:
+            if number in winning_numbers:
+                points = 1 if points == 0 else points * 2
+        total_points += points
+    
+    return total_points
+
 
 def part2():
     scratchcard_counts = defaultdict(int)
