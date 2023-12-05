@@ -2,6 +2,7 @@ import os
 import re
 from collections import defaultdict
 
+
 def process_line(line):
     numbers = re.sub(r'Card\s+\d+:', '', line)
     split_numbers = numbers.split('|')
@@ -17,11 +18,12 @@ def process_line(line):
                 points *= 2
     return winning_numbers, scratched_numbers
 
+
 def part1():
     total_points = 0
     for card in input_lines:
         winning_numbers, scratched_numbers = process_line(card)
-        
+
         points = 0
         for number in scratched_numbers:
             if number in winning_numbers:
@@ -44,11 +46,13 @@ def part2():
 
     return sum(scratchcard_counts.values())
 
+
 def main():
     part1_result = part1()
     print(f"Part 1 answer: {part1_result}")
     part2_result = part2()
     print(f"Part 2 answer: {part2_result}")
+
 
 if __name__ == '__main__':
     directory = os.path.dirname(os.path.realpath(__file__))

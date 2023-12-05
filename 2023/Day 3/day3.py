@@ -1,8 +1,10 @@
 import os
 import re
 
+
 def get_all_number_matches(input_lines):
     return [[(match.group(), match.start(), match.end()) for match in re.finditer(r"[0-9]+", line)] for line in input_lines]
+
 
 def part1():
     valid_number_sum = 0
@@ -20,6 +22,7 @@ def part1():
                 valid_number_sum += int(number_match[0])
 
     return valid_number_sum
+
 
 def part2():
     valid_number_sum = 0
@@ -39,11 +42,13 @@ def part2():
 
     return valid_number_sum
 
+
 def main():
     part1_result = part1()
     print(f"Part 1 answer: {part1_result}")
     part2_result = part2()
     print(f"Part 2 answer: {part2_result}")
+
 
 if __name__ == '__main__':
     directory = os.path.dirname(os.path.realpath(__file__))

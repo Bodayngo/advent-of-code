@@ -6,6 +6,7 @@ def part1():
     for line in input_lines:
         numbers = ''.join(c for c in line if c.isdigit())
         number_list.append(int(f"{numbers[:1]}{numbers[-1:]}"))
+
     return(sum(number_list))
 
 
@@ -25,6 +26,7 @@ alpha_num_mappings = {
 def part2():
     numbers = []
     for line in input_lines:
+
         found_numbers = []
         for alpha, num in alpha_num_mappings.items():
             index = line.find(num)
@@ -39,9 +41,11 @@ def part2():
             index = line.rfind(alpha)
             if index != -1:
                 found_numbers.append((index, num))
+                
         found_numbers.sort()
         number = f"{found_numbers[0][1]}{found_numbers[-1][1]}"
         numbers.append(int(number))
+
     return(sum(numbers))
 
 
