@@ -19,6 +19,8 @@ def process_line(line):
                 points = 1
             else:
                 points *= 2
+
+    # Return the scratched and winning number lists
     return winning_numbers, scratched_numbers
 
 # Function for Part 1
