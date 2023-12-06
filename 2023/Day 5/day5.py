@@ -32,7 +32,7 @@ def get_mapped_value(input_value: int, mappings: list[tuple]):
     else:
         output_value = input_value
 
-    return input_value
+    return output_value
 
 
 def part1():
