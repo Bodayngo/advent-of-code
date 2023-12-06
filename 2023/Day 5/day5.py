@@ -1,8 +1,6 @@
 import os
 
-###############################################################################
-##  Part 1
-###############################################################################
+
 def parse_input():
     mappings_dict = {}
     sections = input.split('\n\n')
@@ -30,15 +28,14 @@ def get_mapped_value(input_value: int, mappings: list[tuple]):
             map = mapping
     if mapping_override:
         offset = map[0] - map[1]
-        input_value += offset
+        output_value = input_value + offset
+    else:
+        output_value = input_value
 
     return input_value
 
-#60 56 37
+
 def part1():
-    """
-    (dest_range_start, src_range_start, range_len)
-    """
     seeds, mappings_dict = parse_input()
     locations = []
     for seed in seeds:
@@ -47,7 +44,6 @@ def part1():
         locations.append(seed)
 
     return min(locations)
-
 
 
 def main():
