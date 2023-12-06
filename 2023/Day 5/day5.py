@@ -39,7 +39,7 @@ def part1():
     seeds, mappings_dict = parse_input()
     locations = []
     for seed in seeds:
-        for mapping_name, mappings in mappings_dict.items():
+        for _, mappings in mappings_dict.items():
             seed = get_mapped_value(seed, mappings)
         locations.append(seed)
 
