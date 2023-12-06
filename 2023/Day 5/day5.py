@@ -22,23 +22,17 @@ def parse_input():
     return seeds, mappings_dict
 
 
-def get_mapped_values(input_values: int, mappings: list[tuple]):
-    mapped_values = []
-    for input_value in input_values:
-        mapping_override = False
-        override_maps = []
-        for mapping in mappings:
-            if mapping[1] <= input_value <= mapping[1] + mapping[2]:
-                mapping_override = True
-                override_maps.append(mapping)
-        if mapping_override:
-            for map in override_maps:
-                offset = map[0] - map[1]
-                mapped_value = input_value + offset
-                mapped_values.append(mapped_value)
-        else:
-            mapped_values.append(input_value)
-    return mapped_values
+def get_mapped_value(input_value: int, mappings: list[tuple]):
+    mapping_override = False
+    for mapping in mappings:
+        if mapping[1] <= input_value <= mapping[1] + mapping[2] - 1:
+            mapping_override = True
+            map = mapping
+    if mapping_override:
+        offset = map[0] - map[1]
+        input_value += offset
+
+    return input_value
 
 #60 56 37
 def part1():
@@ -46,32 +40,25 @@ def part1():
     (dest_range_start, src_range_start, range_len)
     """
     seeds, mappings_dict = parse_input()
-    seed = [14]
-    for mapping_name, mappings in mappings_dict.items():
-        print(f"Mapping name: {mapping_name}")
-        print(mappings)
-        seed = get_mapped_values(seed, mappings)
-        print(seed)
-#    for seed in seeds:
-#        print(f"Seed: {seed}")
-#        print(get_mapped_value(seed, mappings_dict['seed-to-soil']))
-#        for mapping_name, mappings in mappings_dict.items():
-#            print(f"Mapping name: {mapping_name}")
-#            seed = get_mapped_value(seed, mappings)
-#            print(seed)
+    locations = []
+    for seed in seeds:
+        for mapping_name, mappings in mappings_dict.items():
+            seed = get_mapped_value(seed, mappings)
+        locations.append(seed)
+
+    return min(locations)
 
 
 
 def main():
-    part1()
-    #part1_result = part1()
-    #print(f"Part 1 answer: {part1_result}")
+    part1_result = part1()
+    print(f"Part 1 answer: {part1_result}")
     #part2_result = part2()
     #print(f"Part 2 answer: {part2_result}")
 
 if __name__ == '__main__':
     directory = os.path.dirname(os.path.realpath(__file__))
-    input_file = f"{directory}/test_input.txt"
+    input_file = f"{directory}/day5_input.txt"
     with open(input_file, 'r') as file:
         input = file.read().strip()
 
