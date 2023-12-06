@@ -21,12 +21,13 @@ def parse_input():
 
 
 def get_mapped_value(input_value: int, maps: list[tuple]):
-    mapping_override = any(
-        map[1] <= input_value <= map[1] + map[2] - 1
-        for map in maps
-    )
+    mapping_override = False
+    for map in maps:
+        if map[1] <= input_value <= map[1] + map[2] - 1:
+            mapping_override = True
+            matched_map = map
     if mapping_override:
-        offset = map[0] - map[1]
+        offset = matched_map[0] - matched_map[1]
         output_value = input_value + offset
     else:
         output_value = input_value
