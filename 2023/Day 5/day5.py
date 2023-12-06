@@ -46,11 +46,24 @@ def part1():
     return min(locations)
 
 
+def part2():
+    seeds_list, mappings_dict = parse_input()
+    locations = []
+    for seed_start, seed_range in zip(seeds_list[::2], seeds_list[1::2]):
+        for seed in range(seed_start, seed_start + seed_range):
+            for _, mappings in mappings_dict.items():
+                seed = get_mapped_value(seed, mappings)
+            locations.append(seed)
+    
+    return min(locations)
+
+
 def main():
     part1_result = part1()
     print(f"Part 1 answer: {part1_result}")
-    #part2_result = part2()
-    #print(f"Part 2 answer: {part2_result}")
+    part2_result = part2()
+    print(f"Part 2 answer: {part2_result}")
+
 
 if __name__ == '__main__':
     directory = os.path.dirname(os.path.realpath(__file__))
