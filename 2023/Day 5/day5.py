@@ -20,12 +20,11 @@ def parse_input():
     return seeds, mappings_dict
 
 
-def get_mapped_value(input_value: int, mappings: list[tuple]):
-    mapping_override = False
-    for mapping in mappings:
-        if mapping[1] <= input_value <= mapping[1] + mapping[2] - 1:
-            mapping_override = True
-            map = mapping
+def get_mapped_value(input_value: int, maps: list[tuple]):
+    mapping_override = any(
+        map[1] <= input_value <= map[1] + map[2] - 1
+        for map in maps
+    )
     if mapping_override:
         offset = map[0] - map[1]
         output_value = input_value + offset
