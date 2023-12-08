@@ -34,11 +34,12 @@ def get_hand_ranking(hand):
         return 7 # High card
 
 def custom_order(character):
-    order = {'A': 1, 'K': 2, 'Q': 3, 'J': 4, 'T': 5, '9': 6, '8': 7, '7': 8, '6': 9, '5': 10, '4': 11, '3': 12, '2': 13}
-    return order.get(character)
+    custom_order = {'A': 1, 'K': 2, 'Q': 3, 'J': 4, 'T': 5, '9': 6, '8': 7, '7': 8, '6': 9, '5': 10, '4': 11, '3': 12, '2': 13}
+    return custom_order.get(character)
 
 def custom_sort(item):
-    return [custom_order(char) for char in item[0]]
+    custom_order = {'A': 1, 'K': 2, 'Q': 3, 'J': 4, 'T': 5, '9': 6, '8': 7, '7': 8, '6': 9, '5': 10, '4': 11, '3': 12, '2': 13}
+    return [custom_order.get(character) for character in item[0]]
 
 def calculate_bid_rank_products(sorted_bid_list):
     return [int(bid) * (index + 1) for index, bid in enumerate(sorted_bid_list)]
@@ -69,7 +70,7 @@ def part2(input_lines):
 
 def main():
     directory = os.path.dirname(os.path.realpath(__file__))
-    input_file = f"{directory}/puzzle_input.txt"
+    input_file = f"{directory}/test_input.txt"
     with open(input_file, 'r') as file:
         input_lines = file.read().strip().splitlines()
     print(f"Part 1 answer: {part1(input_lines)}")
