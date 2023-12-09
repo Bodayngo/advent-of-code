@@ -1,108 +1,70 @@
 import os
 from collections import Counter
+from enum import IntEnum
+
+
+class HandType(IntEnum):
+    FIVE_OF_A_KIND = 7
+    FOUR_OF_A_KIND = 6
+    FULL_HOUSE = 5
+    THREE_OF_A_KIND = 4
+    TWO_PAIRS = 3
+    ONE_PAIR = 2
+    HIGH_CARD = 1
 
 
 class Hand:
-    def __init__(self, hand: str, bid: str):
-        self.cards = hand
+    def __init__(self, cards, bid, part2=False):
+        self.cards = cards
         self.bid = int(bid)
-        self.counts = Counter(hand)
-        self.num_jokers = hand.count('J')
-        self.hand_power_1 = self.get_hand_power_1()
-        self.card_powers_1 = self.get_card_powers_1()
-        self.hand_power_2 = self.get_hand_power_2()
-        self.card_powers_2 = self.get_card_powers_2()
+        self.part2 = part2
+        self.hand_power = self.get_hand_strength()
+        self.card_powers = self.get_card_strengths()
 
-    def get_hand_power_1(self) -> int:
-        """
-        7: Five of a kind
-        6: Four of a kind
-        5: Full house
-        4: Three of a kind
-        3: Two pair
-        2: One pair
-        1: High card
-        """
-        card_counts = list(self.counts.values())
-        card_counts.sort(reverse=True)
-        if card_counts[0] == 5: return 7
-        elif card_counts[0] == 4: return 6
-        elif card_counts[0] == 3:
-            if card_counts[1] == 2: return 5
-            else: return 4
-        elif card_counts[0] == 2:
-            if card_counts.count(2) == 2: return 3
-            else: return 2
-        else: return 1
-    
-    def get_card_powers_1(self):
-        card_powers = []
-        custom_order = {'A': 13, 'K': 12, 'Q': 11, 'J': 10, 'T': 9, '9': 8, '8': 7, '7': 6, '6': 5, '5': 4, '4': 3, '3': 2, '2': 1}
-        for card in self.cards:
-            card_powers.append(custom_order[card])
-        return card_powers
-    
-    def get_hand_power_2(self) -> int:
-        """
-        7: Five of a kind
-        6: Four of a kind
-        5: Full house
-        4: Three of a kind
-        3: Two pair
-        2: One pair
-        1: High card
-        """
-        card_counts = list(self.counts.values())
-        card_counts.sort(reverse=True)
-        if card_counts[0] == 5: return 7
-        elif card_counts[0] == 4:
-            return 7 if self.num_jokers in [1, 4] else 6
-        elif card_counts[0] == 3:
-            if self.num_jokers == 2 or (self.num_jokers == 3 and card_counts[1] == 2): return 7
-            elif self.num_jokers in [1, 3]: return 6
-            elif card_counts[1] == 2: return 5
-            else: return 4
-        elif card_counts[0] == 2:
-            if card_counts.count(2) == 2 and self.num_jokers == 2: return 6
-            elif card_counts.count(2) == 2 and self.num_jokers == 1: return 5
-            elif self.num_jokers == 1: return 4
-            elif card_counts.count(2) == 2: return 3
-            else: return 2
-        else: return 2 if self.num_jokers == 1 else 1
-    
-    def get_card_powers_2(self):
-        card_powers = []
-        custom_order = {'A': 13, 'K': 12, 'Q': 11, 'T': 10, '9': 9, '8': 8, '7': 7, '6': 6, '5': 5, '4': 4, '3': 3, '2': 2, 'J': 1}
-        for card in self.cards:
-            card_powers.append(custom_order[card])
-        return card_powers
+    def get_hand_strength(self):
+        card_counts = Counter(self.cards)
+        if self.part2 and 'J' in self.cards:
+            num_jokers = card_counts.pop('J')
+            if not card_counts: return HandType.FIVE_OF_A_KIND
+            card_counts[max(card_counts, key=card_counts.get)] += num_jokers
+        if len(card_counts) == 1: return HandType.FIVE_OF_A_KIND
+        elif len(card_counts) == 2: return HandType.FOUR_OF_A_KIND if 4 in card_counts.values() else HandType.FULL_HOUSE
+        elif len(card_counts) == 3: return HandType.THREE_OF_A_KIND if 3 in card_counts.values() else HandType.TWO_PAIRS
+        elif len(card_counts) == 4: return HandType.ONE_PAIR
+        else: return HandType.HIGH_CARD
 
+    def get_card_strengths(self):
+        custom_order = [
+            '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A'
+        ] if not self.part2 else [
+            'J', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'Q', 'K', 'A'
+        ]
+        return [custom_order.index(card) for card in self.cards]
+        
 
-def part1(hands):
-    hands.sort(key=lambda hand: (hand.hand_power_1, hand.card_powers_1))
+def process_input_lines(input_lines, part2):
+    return [
+        Hand(line.split(' ')[0], int(line.split(' ')[1]), part2)
+        for line in input_lines
+    ]
+
+def part1(input_lines):
+    hands = process_input_lines(input_lines, part2=False)
+    hands.sort(key=lambda hand: (hand.hand_power, hand.card_powers))
     return sum([hand.bid * index for index, hand in enumerate(hands, start=1)])
 
-
-def part2(hands):
-    hands.sort(key=lambda hand: (hand.hand_power_2, hand.card_powers_2))
-    for hand in hands:
-        print(hand.cards)
-        print(hand.hand_power_2)
+def part2(input_lines):
+    hands = process_input_lines(input_lines, part2=True)
+    hands.sort(key=lambda hand: (hand.hand_power, hand.card_powers))
     return sum([hand.bid * index for index, hand in enumerate(hands, start=1)])
-
 
 def main():
     directory = os.path.dirname(os.path.realpath(__file__))
-    input_file = f"{directory}/test_input.txt"
+    input_file = f"{directory}/puzzle_input.txt"
     with open(input_file, 'r') as file:
         input_lines = file.read().strip().splitlines()
-    hands = [
-        Hand(line.split(' ')[0], line.split(' ')[1])
-        for line in input_lines
-    ]
-    print(f"Part 1 answer: {part1(hands)}")
-    print(f"Part 2 answer: {part2(hands)}")
+    print(f"Part 1 answer: {part1(input_lines)}")
+    print(f"Part 2 answer: {part2(input_lines)}")
  
-
 if __name__ == '__main__':
     main()
