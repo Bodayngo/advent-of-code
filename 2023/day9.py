@@ -24,17 +24,11 @@ def derive_missing_number(numbers: list[int], part2: bool=False):
         return result
 
 def part1(numbers_list):
-    derived_last_numbers = [
-        derive_missing_number(numbers)
-        for numbers in numbers_list
-    ]
+    derived_last_numbers = [derive_missing_number(numbers) for numbers in numbers_list]
     return sum(derived_last_numbers)
 
 def part2(numbers_list):
-    derived_first_numbers = [
-        derive_missing_number(numbers, part2=True)
-        for numbers in numbers_list
-    ]
+    derived_first_numbers = [derive_missing_number(numbers, part2=True) for numbers in numbers_list]
     return sum(derived_first_numbers)
 
 def main():
